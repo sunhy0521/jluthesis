@@ -1,0 +1,1 @@
+考虑去除gb_jlu.cap[cpx]，将其需要内容放入jluthesis.sty中
