@@ -264,10 +264,11 @@
 
 % 初始化中文环境
 
-\def\jlu@beginCJK{\begin{CJK*}{GBK}{song}}
+%\def\jlu@beginCJK{\begin{CJK*}{GBK}{song}}
+%\def\jlu@endCJK{\clearpage\end{CJK*}}
+\def\jlu@beginCJK{\begin{CJK*}{UTF8}{song}}
 \def\jlu@endCJK{\clearpage\end{CJK*}}
-\AtBeginDocument{\jlu@beginCJK}
-\AtEndDocument{\jlu@endCJK}
+\AtBeginDocument{\jlu@beginCJK} \AtEndDocument{\jlu@endCJK}
 
 \AtBeginDocument{\makeatletter\InputIfFileExists{jlumastersthesis.cfg}{}{%
   \PackageError{jlumastersthesis}{%
