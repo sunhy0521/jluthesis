@@ -3,46 +3,34 @@
 % 参考: 哈尔滨工业大学Pluto博硕士模板1.8rc1
 %
 
+
 %\def\degree{Master}
 %\def\subject{Engineering}
-%\def\usewhat{dvipdfm}      % 你喜欢哪种编译方式，pdf[la]tex dvipdfm dvi
+%\def\usewhat{dvipdfmx}      % 你喜欢哪种编译方式，pdf[la]tex dvipdfm dvi
 
-%%%% 导言区使用中文
+% 导言区使用中文
 %\makeatletter
 %\@tempcnta=128
 %\loop \catcode\@tempcnta=13 \ifnum\@tempcnta<255 \advance \@tempcnta \@ne
 %\repeat
 %\makeatother
 
-\documentclass[12pt,openany,twoside]{book}
+\documentclass[openany,twoside]{book}
 
-%%% 宏包jlumastersthesis，吉林大学硕士论文package
+%%% 宏包jluthesis，吉林大学硕士论文package
 % 选项：(其它不识别arguments转递至宏包geometry)
-% linux: 在Linux下，汉字字体只使用arabic出品的宋体和楷体
 % chinesepunct: 用非等宽(调整後的)的中文标点，默认不使用
-% jludebug: 电子稿选项，打开调试，开启颜色,开启链接框
-% jluelectronic: 电子稿选项，关闭调试，开启颜色，关闭链接框
-% jlufinal: 打印稿选项，关闭调试，关闭颜色，关闭链接框，default
+% debug: 电子稿选项，打开调试，开启颜色,开启链接框
+% electronic: 电子稿选项，关闭调试，开启颜色，关闭链接框
+% final: 打印稿选项，关闭调试，关闭颜色，关闭链接框，default
 % pdftex: 使用pdf[la]tex 编译
 % dvipdfm: 使用dvipdfm[x]编译，default
 % dvi： 使用Latex编译，利用yap查看，不输出pdf，使链接在dvi中有效
-%\usepackage[jludebug,dvi]{jlumastersthesis}
-%\usepackage[jludebug]{jlumastersthesis}
-%\usepackage[jluelectronic]{jlumastersthesis}
-\usepackage[jluelectronic]{jlumastersthesis}
-%\usepackage[\usewhat]{jlumastersthesis}
+%\usepackage[debug,dvi]{jluthesis}
+%\usepackage[debug]{jluthesis}
+\usepackage[electronic]{jluthesis}
+%\usepackage[\usewhat]{jluthesis}
 
-%%% 包含宏包natbib, hypernat
-% 我不知道为什么在宏包jlumastersthesis中\RequirePackage之会出现
-% citation multipy defined 的 warning？？？
-\usepackage[sort&compress,numbers]{natbib}
-\usepackage{hypernat}
-%
-\newcommand\bibpreamble{%           % 参考文献加入到中文目录
-    \addcontentsline{toc}{chapter}{\bibname}%
-    \markboth{\songti \xiaowu \bibname}{\songti \xiaowu\bibname}}
-\setlength{\bibsep}{1pt plus 1pt}       % 参考文献列表中文献项目间的空白
-\newcommand{\ucite}[1]{$^{\mbox{\scriptsize \cite{#1}}}$} % 增加 \ucite 命令使显示的引用为上标形式
 
 %%% 利用宏包geometry 设定纸张和页面layout (geometry)
 % 可参考宏包jlumasterthesis.sty
@@ -53,13 +41,13 @@
 % pdfsubject: 主题
 % pdfkeywords:　关键字
 % pdfauthor: 作者
-\hypersetup{%
-  pdftitle          = {Study on numerical simulation of multiscale %
-                        phenomena in microfluidic and nanofluidic chips},
-  pdfsubject        = {a unified framework for multiscale simulation of micro-%
-                        and nano-fluidics},
-  pdfkeywords       = {multiscale,microfluidics,nanofluidics,mems,electroosmosis},
-  pdfauthor         = {Zhang Yinhe},
+\hypersetup{
+  pdftitle    = {Study on numerical simulation of multiscale %
+                 phenomena in microfluidic and nanofluidic chips},
+  pdfsubject  = {a unified framework for multiscale simulation of micro-%
+                 and nano-fluidics},
+  pdfkeywords = {multiscale,microfluidics,nanofluidics,mems,electroosmosis},
+  pdfauthor   = {Zhang Yinhe}
 }
 
 % 注意：body/chap0, 其中的目录分隔符是 正斜线，不是反斜线
@@ -71,7 +59,7 @@
                 body/ResearchContents,
                 body/ResearchSchedule,
                 appendix/app1
-            }
+}
 
 %%% 定义所有的eps文件在 figures 子目录下
 \graphicspath{{figures/}}
@@ -84,7 +72,8 @@
 
 \input{preface/cover}
 
-\pagenumbering{Roman} \pdfbookmark[0]{目~~~~录}{contents}
+\pagenumbering{Roman} 
+%\pdfbookmark[0]{目~~~~录}{contents}
 \tableofcontents
 % 清除目录后面空页的页眉和页脚
 \clearpage{\pagestyle{empty}\cleardoublepage}
@@ -94,9 +83,14 @@
 \defaultfont                        % 正文使用默认字体，小四，宋体
 
 \include{body/chap0}
+\typeout{body/chap0 readed}
+
 \include{body/Motive}
+
 \include{body/ResearchStatus}
+
 \include{body/ResearchContents}
+
 \include{body/ResearchSchedule}
 
 \backmatter
@@ -108,22 +102,14 @@
 % made from makebst By Zhang Yinhe, see makebst-jlu.log for details
 
 \bibliographystyle{jlu}
-% \fancyhead[CO]{\wuhao \songti \leftmark}  % 使参考文献的页眉奇偶页都显示为``参考文献''
-% \fancyhead[CE]{\wuhao \songti \leftmark}
-% \newpage
-% \nocite{*}                            % 论文中没有引用但需列出的参考文献，列于此 *
+%\fancyhead[CO]{\wuhao\songti\leftmark}% 使参考文献的页眉奇偶页都显示为``参考文献''
+%\fancyhead[CE]{\wuhao \songti \leftmark}
+%\newpage
+%\nocite{*}                            % 论文中没有引用但需列出的参考文献，列于此 *
 \bibliography{bibliography/plan}
 
 %%% 附录
 \appendix
 \defaultfont
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%% 测试用：打印页面尺寸设置
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% 尝试将其放在宏包jluthesis来加入文档最后
-\ifjludebug
-    \input{appendix/mylayout}
-\fi
 
 \end{document}
