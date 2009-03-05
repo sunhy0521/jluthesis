@@ -1,0 +1,336 @@
+% Template Package for writing master's thesis for Jilin University
+% 吉林大学硕士论文 TeX 模板
+% 
+% 使用XeTeX系统处理源文件，方便直接使用truetype或opentype字体
+% 参考了XJTUthesis.cls,
+% 可用的选项：
+%
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{jluthesisUTF8}[2009/03/01 v0.01
+  Layout style for Jilin University master's diploma thesis]
+
+\newif\if@JLU@debug
+\newif\if@JLU@ebook
+\newif\if@JLU@hardcopy
+\DeclareOption{debug}{\@JLU@debugtrue\@JLU@ebookfalse\@JLU@hardcopyfalse}
+\DeclareOption{ebook}{\@JLU@ebooktrue\@JLU@debugfalse\@JLU@hardcopyfalse}
+\DeclareOption{hardcopy}{\@JLU@hardcopytrue\@JLU@debugfalse\@JLU@ebookfalse}
+
+% 其它的选项交给 geometry 宏包处理，为了省事
+\DeclareOption*{\PassOptionsToPackage{\CurrentOption}{geometry}}
+
+\ExecuteOptions{hardcopy}
+\ProcessOptions
+
+% 页面设置
+% 打印纸的真正16开纸型参数是195mm×270mm
+% 学校要求的184mm×260mm是最后实际装订时裁掉边之后的结果
+% 因此比b5偏大，比16开偏小
+% 编译时，加上选项：-papersize=195mm,270mm
+\RequirePackage[%
+  paperwidth=19.5cm,paperheight=27.0cm,
+  textwidth=14.5cm,textheight=21.0cm,  % 论文版芯145mm X 210mm
+  %bindingoffset=0.0cm,  % 装订线宽度
+  %inner=1.95cm,         % 内侧空白（左页边距）
+  hmarginratio=1:1,     % 左右页边距之比，1:1 为左右页边距相等
+  bottom=3.0cm,         % 底部空白（下边距）
+  headheight=1.0cm,     % 页眉高度
+  headsep=0.6cm,        % 页眉距上部正文文本高度
+  footskip=1.0cm,        % 页脚底部距底部正文文本的距离
+  dvipdfm
+  ]{geometry}
+
+% utf8，truetype，opentype直接支持 (XeTeX/XeLaTeX)
+\RequirePackage{xltxtra,fontspec}
+
+% 中文排版，启用CJK粗体字，斜体字，调用CJKnumb宏包，
+% 中英文转换时、在中文和行内数学表达式之间根据需要插入空格
+\RequirePackage[%
+  BoldFont,SlantFont,CJKnumber,%
+  CJKtextspaces,CJKmathspaces
+  ]{xeCJK}
+
+% 首行缩进
+\RequirePackage{indentfirst}
+
+\RequirePackage{graphicx}    % 图形包含
+
+\RequirePackage{fancyhdr}    % 设定页眉页脚
+\RequirePackage{titlesec}    % 重定义章节标题
+\RequirePackage{titletoc}    % 重定义目录
+
+\RequirePackage{amsmath}     % AMS数学符号，字体，公式支持
+\RequirePackage{amsfonts}
+%\RequirePackage{amssymb}
+\RequirePackage{txfonts}     % Greek letters
+\RequirePackage{stmaryrd}    % special symbols
+
+\RequirePackage{fancybox}    % produce box-contained texts
+\RequirePackage{array}       % enhance tabular function
+\RequirePackage{multirow}    % enable multi-row in tables
+\RequirePackage{longtable}   % enable tables span pages
+
+\RequirePackage[%
+  breaklinks,hyperindex,bookmarksnumbered,%
+  pdfstartview=FitH,dvipdfmx]
+  {hyperref}
+
+% 参考文献等的引用
+\RequirePackage[sort&compress,numbers,square,super]{natbib}  
+\RequirePackage{hypernat}  % must be loaded after natbib and hyperref
+
+\if@JLU@debug
+  \RequirePackage{layouts}       
+  \geometry{showframe,verbose}
+  \hypersetup{%
+    colorlinks=true,citecolor=blue,linkcolor=blue,%
+    urlcolor=blue,anchorcolor=red,debug=true}
+\else 
+  \if@JLU@ebook
+    \hypersetup{%
+      colorlinks=true,citecolor=blue,linkcolor=blue,%
+      urlcolor=blue,anchorcolor=red}
+  \else
+    \hypersetup{pdfborder={0 0 0}}
+  \fi
+\fi
+
+% 设定中文
+\defaultfontfeatures{Mapping=tex-text}  % 要在设定字体之前
+\XeTeXlinebreaklocale "zh"
+\XeTeXlinebreakskip = 0pt plus 1pt minus 0.1pt
+
+\setCJKmainfont{Adobe Song Std}   % 中文缺省字体: 宋体
+\setCJKsansfont{Adobe Kaiti Std}  % 中文无衬线字体：楷体
+\setCJKmonofont{Adobe Song Std}   % 中文数学字体：宋体
+\setmainfont{TeX Gyre Pagella}    % 英文缺省字体：替代 Times New Roman
+\setsansfont{TeX Gyre Heros}      % 英文无衬线字体: 替代 Arial
+\setmonofont{Courier Std}         % 等宽字体：Adobe Courier Std
+
+\setCJKfamilyfont{lishu}{LiSu}    % 定义其它字体: 隶书，黑体，仿宋
+\newcommand*{\li}{\CJKfamily{lishu}}
+\setCJKfamilyfont{heiti}{Adobe Heiti Std} 
+\newcommand*{\hei}{\CJKfamily{heiti}}
+\setCJKfamilyfont{fs}{Adobe Fangsong Std} 
+\newcommand*{\fs}{\CJKfamily{fs}}
+
+% 中文标点模式：banjiao, quanjiao, kaiming, CCT, hangmobanjiao, plain
+\punctstyle{quanjiao}
+
+% 中文字体声明 (cf. ctex.sty), 
+% \baselinskip usually is set to 1.2 times of font size by experience
+\newcommand{\chuhao}{
+  \fontsize{42.16}{50.59}\selectfont
+  \setlength{\parindent}{84.32pt plus 1pt minus 0pt}} % 初号字  42bp
+\newcommand{\xiaochu}{
+  \fontsize{36.14}{43.36}\selectfont
+  \setlength{\parindent}{72.28pt plus 1pt minus 0pt}} % 小初号  36bp
+\newcommand{\yihao}{
+  \fontsize{26.10}{31.32}\selectfont
+  \setlength{\parindent}{52.20pt plus 1pt minus 0pt}} % 一号字  26bp
+\newcommand{\xiaoyi}{
+  \fontsize{24.09}{28.91}\selectfont
+  \setlength{\parindent}{48.18pt plus 1pt minus 0pt}} % 小一号  24bp
+\newcommand{\erhao}{
+  \fontsize{22.08}{26.50}\selectfont
+  \setlength{\parindent}{44.16pt plus 1pt minus 0pt}} % 二号字  22bp
+\newcommand{\xiaoer}{
+  \fontsize{18.07}{21.68}\selectfont
+  \setlength{\parindent}{36.14pt plus 1pt minus 0pt}} % 小二号  18bp
+\newcommand{\sanhao}{
+  \fontsize{16.06}{19.27}\selectfont
+  \setlength{\parindent}{32.12pt plus 1pt minus 0pt}} % 三号字  16bp
+\newcommand{\xiaosan}{
+  \fontsize{15.06}{18.07}\selectfont
+  \setlength{\parindent}{30.12pt plus 1pt minus 0pt}} % 小三号  15bp
+\newcommand{\sihao}{
+  \fontsize{14.05}{16.86}\selectfont
+  \setlength{\parindent}{28.10pt plus 1pt minus 0pt}} % 四号字  14bp
+\newcommand{\xiaosi}{
+  \fontsize{12.05}{14.45}\selectfont
+  \setlength{\parindent}{24.10pt plus 1pt minus 0pt}} % 小四号  12bp
+\newcommand{\wuhao}{
+  \fontsize{10.54}{12.65}\selectfont
+  \setlength{\parindent}{21.08pt plus 1pt minus 0pt}} % 五号字10.5bp
+\newcommand{\xiaowu}{
+  \fontsize{9.03}{10.84}\selectfont
+  \setlength{\parindent}{18.06pt plus 1pt minus 0pt}} % 小五号   9bp
+\newcommand{\liuhao}{
+  \fontsize{7.53}{9.03}\selectfont
+  \setlength{\parindent}{15.06pt plus 1pt minus 0pt}} % 六号字 7.5bp
+\newcommand{\xiaoliu}{
+  \fontsize{6.52}{7.83}\selectfont
+  \setlength{\parindent}{13.04pt plus 1pt minus 0pt}} % 小六号 6.5bp
+\newcommand{\qihao}{
+  \fontsize{5.52}{6.62}\selectfont
+  \setlength{\parindent}{11.04pt plus 1pt minus 0pt}} % 七号字 5.5bp
+\newcommand{\bahao}{
+  \fontsize{5.02}{6.02}\selectfont
+  \setlength{\parindent}{10.04pt plus 1pt minus 0pt}} % 八号字   5bp
+% redefine following font size commands to accompany Chinese
+\let\@normalsize\normalsize
+\def\normalsize{\@normalsize \xiaosi}
+\let\@samll\small
+\def\samll{\@samll \wuhao}
+\let\@footnotesize\footnotesize
+\def\footnotesize{\@footnotesize \xiaowu}
+\let\scriptsize\liuhao
+\let\tiny\xiaoliu
+\let\large\sihao
+\let\Large\xiaosan
+\let\LARGE\sanhao
+\let\huge\xiaoer
+\let\Huge\erhao
+% math font size declartion (cf. ctex.sty)
+% \DeclareMathSizes{<t-size>}{<mt-size>}{<s-size>}{<ss-size>}
+\DeclareMathSizes{5.02}{5.02}{5}{5}
+\DeclareMathSizes{5.52}{5.52}{5}{5}
+\DeclareMathSizes{6.52}{6.52}{5}{5}
+\DeclareMathSizes{7.53}{7.53}{5}{5}
+\DeclareMathSizes{9.03}{9.03}{6}{5}
+\DeclareMathSizes{10.54}{10.54}{7}{5}
+\DeclareMathSizes{12.05}{12.05}{8}{6}
+\DeclareMathSizes{14.05}{14.05}{10.54}{7.53}
+\DeclareMathSizes{15.06}{15.06}{12.05}{9.03}
+\DeclareMathSizes{16.06}{16.06}{14.05}{10.54}
+\DeclareMathSizes{18.07}{18.07}{15.06}{12.05}
+\DeclareMathSizes{22.08}{22.08}{16.06}{14.05}
+\DeclareMathSizes{24.09}{24.09}{18.07}{15.06}
+\DeclareMathSizes{26.10}{26.10}{22.08}{16.06}
+\DeclareMathSizes{36.14}{36.14}{24.09}{18.07}
+\DeclareMathSizes{42.16}{42.16}{26.10}{22.08}
+
+% 首行缩进：需根据正文字号微调
+%\setlength{\parindent}{24pt plus 1pt minus 0pt}
+
+% 行间距，\baselinestretch MUST be followed by fontsize change command
+\newcommand{\defaultfont}{%
+  \renewcommand{\baselinestretch}{1.37}
+  \small \normalsize}
+
+%\defaultfont
+
+% 段间距
+\setlength{\parskip}{0.1em}
+
+\renewcommand\contentsname{目\qquad 录}
+\renewcommand\listfigurename{插\quad 图\quad 目\quad 录}
+\renewcommand\listtablename{表\quad 格\quad 目\quad 录}
+\renewcommand\bibname{参\quad 考\quad 文\quad 献}
+\renewcommand\indexname{索\qquad 引}
+\renewcommand\figurename{图}
+\renewcommand\tablename{表}
+
+\renewcommand{\appendixname}{附录}
+\newcommand{\CJKprechaptername}{第}
+\newcommand{\CJKpostchaptername}{章}
+\newcommand{\CJKchaptername}{%
+  \CJKprechaptername\;\thechapter\;\CJKpostchaptername}
+
+% 添加定义 \appendix
+\let\@appendix\appendix
+\renewcommand{\appendix}{\@appendix%
+  \renewcommand{\CJKprechaptername}{\appendixname}
+  \renewcommand{\CJKpostchaptername}{\relax}
+}
+
+% 重定义章节标题
+% 第1章 引言，居中，黑体，
+% \titleformat{<command>}[<shape>]{<format>}{<label>}{<sep>}{<before>}[<after>]
+%   format: 标题格式，label：标题号(如第1章)，
+%   sep：标题号与标题文字之间距离，before: 标题文字之前运行的代码
+% \titlespacing{command}{<leftskip>}{<beforeskip>}{<afterskip>}
+%   leftskip：左缩进；beforeskip：标题前垂直空白；afterskip：标题与正文间垂直空白
+
+\setcounter{secnumdepth}{5}  % 章节深度
+\setcounter{tocdepth}{3}     % 目录深度
+
+\titleformat{\chapter}{\centering\hei\xiaoer}{\CJKchaptername}{1em}{}
+\titlespacing{\chapter}{0pt}{8pt}{16pt}
+
+\titleformat{\section}{\hei\xiaosan}{\thesection}{0.5em}{}
+\titlespacing{\section}{0pt}{13pt}{13pt}
+
+\titleformat{\subsection}{\hei\sihao}{\thesubsection}{0.5em}{}
+\titlespacing{\subsection}{0pt}{8pt}{7pt}
+
+\titleformat{\subsubsection}{\hei\normalsize}{\thesubsubsection}{0.5em}{}
+\titlespacing{\subsubsection}{0pt}{3pt}{2pt}{}
+
+%\titleformat{\subsubsubsection}{\normalfont\mormalsize}{\thesubsubsubsection}{0.5em}{}
+
+% 控制中文目录, \vspace{0.0em}控制章行与前一行的多余间距
+% \dottedcontents{<section>}[<left>]{<above>}{<label width>}{<leader width>}
+\dottedcontents{chapter}[0.0em]{\vspace{0.3em}\hei\small}{0.0em}{5pt}
+\dottedcontents{section}[1.16cm]{\vspace{0.3em}\small}{1.8em}{5pt}
+\dottedcontents{subsection}[2.00cm]{\vspace{0.3em}\small}{2.7em}{5pt}
+\dottedcontents{subsubsection}[2.86cm]{\vspace{0.3em}\small}{3.4em}{5pt}
+
+%\titlecontents{chapter}[0.0em]{\vspace{0.3em}\hei\small}
+%  {\contentslabel[]{0.0em}}{0pt}{\titlerule*[5pt]{.}\contentspage}
+
+
+% 在页眉下段画一粗一细两条横线
+\let\headrulewidth\headwidth  % 使装饰线的宽度等于页眉宽度
+\newlength{\thicklinewidth}
+\newlength{\thinlinewidth}
+\setlength{\thicklinewidth}{2.9pt}
+\setlength{\thinlinewidth}{0.4pt}
+\newcommand{\makeheadrule}{ % 在下一行尾加 % 号
+  \noindent%
+  \makebox[0pt][l]{\rule[.65\baselineskip]{\headrulewidth}{\thinlinewidth}}%
+  \rule[0.82\baselineskip]{\headrulewidth}{\thicklinewidth}
+  \vskip-.8\baselineskip}
+
+% 重定义页眉页脚样式 plain
+\fancypagestyle{plain}{%
+  \fancyhf{}
+   \renewcommand{\headrule}{%
+     \if@fancyplain \let\headrulewidth\plainheadrulewidth \fi
+     \makeheadrule}
+  \renewcommand{\footrulewidth}{0.0cm}        % 没有页脚线
+  \fancyhead[CO]{\small \leftmark}
+  \fancyhead[CE]{\small 吉林大学工学硕士学位论文}%
+  \fancyfoot[C]{\small--~\thepage~--}  
+}
+
+% 页眉页脚使用重定义过的 plain 格式
+\pagestyle{plain}                   
+
+% N.B: 重定义\chaptermark，不要注销这一行，否则页眉会变成：“第1章1. 绪论”样式
+% 这一行要保持放在 \pagestyle{plain} 后面，否则会被redefined
+\renewcommand\chaptermark[1]{%
+  \markboth{\CJKchaptername \hspace{1em}#1}{}}
+
+
+\endinput
+%%
+%% end of file `jluthesisUTF8.sty'
+
+%%% Local Variables:
+%%% coding: utf-8
+%%% mode: latex
+%%% End:
+
+% 吉林大学硕士生学位论文的排版格式要求
+% 
+% 硕士论文一律为横开本，左侧装订，以16开纸排版印刷，装订后尺寸
+% 为长26cm，宽18.5cm。论文必须打印，正文一般以四号或小四号打印
+% 行间距及字间距自定。
+
+% 使用小四号字体
+
+
+% 宏包hyperref的设定
+% 宏包geometry的设定
+
+% 尽量使用自由字体，如 TeX Gyre 系列
+% TeX Gyre Heros: 可以替代 Arial
+% TeX Gyre Termes: 可以替代 Times New Roman
+% 
+% 或者使用免费商业字体，如 Adobe 公司的几款中文字体
+% Adobe Song Std
+% Adobe Heiti Std
+% Adobe Fangsong Std
+% Adobe Kaiti Std
